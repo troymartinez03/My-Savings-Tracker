@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneySaving | PHP Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="money-background" id="moneyBackground"></div>
+<header>
+    <div class="logo">Money<span>Saving.</span></div>
+    <p>My Personal Savings Tracker</p>
+</header>
+
+<main class="container">
+
+    <div class="welcome">
+        <h1>My Savings Dashboard 💰</h1>
+        <p>Small savings today, bigger dreams tomorrow! Every peso counts, but please don't just put in a (1₱)single peso—have some shame!</p>
+    </div>
+
+    <div class="dashboard">
+
+        <div class="card balance-card">
+            <p class="card-label">TOTAL MONEY SAVED</p>
+            <div class="amount" id="total">₱0.00</div>
+            <p class="balance-message">Keep saving and reach your buraot dreams!</p>
+        </div>
+
+        <div class="card">
+            <p class="card-label">JUST SET A TARGET THAT YOU THINK IS ACHIEVABLE!!</p>
+            <div class="amount" id="goalDisplay">₱10,000.00</div>
+
+            <input class="goal-input" type="number"
+                id="goalInput" placeholder="Set your savings goal" min="1">
+
+            <button class="add-btn update-btn" onclick="setGoal()">
+                Update Goal
+            </button>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+
+            <div class="progress-info">
+                <span id="percentage">0% completed</span>
+                <span id="remaining">₱10,000 remaining</span>
+            </div>
+        </div>
+
+    </div>
+
+    <section class="section">
+        <h2>💵 Add Philippine Peso Bills</h2>
+        <p class="section-description">
+            Select a denomination to add it to your savings.
+        </p>
+
+        <div class="bill-grid">
+
+            <button class="bill" onclick="openDepositModal(20)">
+              <div class="symbol">PHILIPPINE PESO</div>
+            <!-- for money images <img src="images/PHP_20_obv.jpg" style="width: 50%;"> -->
+                 <h3>₱20</h3>
+            <div class="symbol">TWENTY PESOS</div>
+            </button>
+
+            <button class="bill" onclick="openDepositModal(50)">
+              <div class="symbol">PHILIPPINE PESO</div>
+                 <h3>₱50</h3>
+            <div class="symbol">FIFTY PESOS</div>
+            </button>
+
+
+            <button class="bill" onclick="openDepositModal(100)">
+              <div class="symbol">PHILIPPINE PESO</div>
+                 <h3>₱100</h3>
+            <div class="symbol">ONE-HUNDRED PESOS</div>
+            </button>
+
+
+            <button class="bill" onclick="openDepositModal(200)">
+              <div class="symbol">PHILIPPINE PESO</div>
+                 <h3>₱200</h3>
+            <div class="symbol">TWO HUNDRED PESOS</div>
+            </button>
+
+
+            <button class="bill" onclick="openDepositModal(500)">
+              <div class="symbol">PHILIPPINE PESO</div>
+                 <h3>₱500</h3>
+            <div class="symbol">FIVE HUNDRED PESOS</div>
+            </button>
+
+
+            <button class="bill" onclick="openDepositModal(1000)">
+              <div class="symbol">PHILIPPINE PESO</div>
+                 <h3>₱1,000</h3>
+            <div class="symbol">ONE THOUSAND PESOS</div>
+            </button>
+
+
+        </div>
+
+        <div class="custom-box">
+            <input type="number" id="customAmount"
+                placeholder="Enter custom amount (₱)" min="0.01" step="0.01">
+
+            <button class="add-btn" onclick="addCustom()">
+                + Add Savings
+            </button>
+        </div>
+    </section>
+
+<!-- SAVINGS GRAPH -->
+<section class="card graph-section">
+    <div class="graph-header">
+        <div>
+            <h2>📈 Savings Growth</h2>
+            <p>Track your deposited money over time.</p>
+        </div>
+        <span class="graph-tag">PHP Tracker</span>
+    </div>
+
+    <div class="graph-summary">
+        <div>
+            <small>Total Deposits</small>
+            <h3 id="depositCount">0</h3>
+        </div>
+
+        <div>
+            <small>Current Savings</small>
+            <h3 id="graphTotal">₱0.00</h3>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="savingsChart"></canvas>
+    </div>
+</section>
+
+    <section class="card history">
+        <h2>📋 Savings History</h2>
+
+        <div id="historyList">
+            <p class="empty-history">No savings added yet.</p>
+        </div>
+
+        <button class="reset-btn" onclick="resetSavings()">
+            Reset All Savings
+        </button>
+    </section>
+
+<!-- PREVIOUS MONTH SAVINGS DASHBOARD -->
+<section class="card monthly-dashboard">
+
+    <div class="monthly-header">
+        <div>
+            <h2>📅 Previous Month Savings</h2>
+            <select id="monthSelector" class="month-selector"
+           onchange="renderPreviousMonth(this.value)">
+            <option value="">Select a month</option>
+        </select>
+        </div>
+
+        <span class="monthly-tag">Monthly Archive</span>
+    </div>
+
+    <div class="monthly-summary">
+<!-- Monthly Goal Status -->
+<div class="monthly-goal-status">
+    <small>Monthly Goal Status</small>
+    <span id="monthlyGoalStatus" class="goal-status-badge">
+        Did not meet the Saving goal
+    </span>
+</div>
+        <div class="monthly-box">
+            <small>Total Saved</small>
+            <h3 id="monthlyTotal">₱0.00</h3>
+        </div>
+
+        <div class="monthly-box">
+            <small>Total Deposits</small>
+            <h3 id="monthlyCount">0</h3>
+        </div>
+
+    </div>
+
+    <h3 class="monthly-history-title">
+        Previous Month Transactions
+    </h3>
+
+    <div id="monthlyHistory">
+        <p class="empty-history">
+            No savings records from the previous month.
+        </p>
+    </div>
+
+</section> 
+
+</main>
+
+<footer>
+    © 2026 MoneySaving | Save wisely, spend responsibly.
+</footer>
+<!-- DEPOSIT CONFIRMATION POPUP -->
+<div class="modal-overlay" id="depositModal">
+    <div class="modal-box">
+
+        <div class="modal-icon">💰</div>
+
+        <h2>Confirm Your Deposit</h2>
+
+        <p>Are you sure you want to add this amount to your savings?</p>
+
+        <div class="modal-amount" id="depositAmount">
+            ₱0.00
+        </div>
+
+        <div class="modal-buttons">
+            <button class="cancel-deposit" onclick="closeDepositModal()">
+                Cancel
+            </button>
+
+            <button class="confirm-deposit" onclick="confirmDeposit()">
+                Confirm Deposit
+            </button>
+        </div>
+
+    </div>
+</div>
+<!-- SAVINGS GOAL CONGRATULATIONS POPUP -->
+<div class="modal-overlay" id="goalModal">
+    <div class="modal-box goal-modal">
+
+        <div class="celebration-icon">🏆</div>
+
+        <h2>Congratulations!</h2>
+
+        <p class="congrats-message">
+            Amazing work! You have successfully reached your savings goal! IKAIN NA NATIN YAN!!!
+        </p>
+
+        <div class="achievement-amount">
+            <small>YOUR TOTAL SAVINGS</small>
+            <h3 id="achievedAmount">₱0.00</h3>
+        </div>
+
+        <p class="goal-message">
+            You did it! Keep (being buraot)saving and reaching for bigger dreams! 🎉
+        </p>
+
+        <button class="celebrate-btn" onclick="closeGoalModal()">
+            Awesome! 🎉
+        </button>
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
